@@ -1,3 +1,5 @@
+// +build 386,!gles2 amd64,!gles2
+
 // Copyright (c) 2010 Khronos Group.
 // This material may be distributed subject to the terms and conditions
 // set forth in the Open Publication License, v 1.0, 8 June 1999.
@@ -6,7 +8,6 @@
 // Copyright (c) 1991-2006 Silicon Graphics, Inc.
 // This document is licensed under the SGI Free Software B License.
 // For details, see http://oss.sgi.com/projects/FreeB.
-// +build 386,!gles2 amd64,!gles2
 
 // Package gl implements Go bindings to OpenGL.
 //
@@ -14,7 +15,7 @@
 //  http://github.com/go-gl/glow
 //
 // Generated based on the OpenGL XML specification:
-//  SVN revision 29209
+//  SVN revision 27695
 package gl
 
 // #cgo darwin  LDFLAGS: -framework OpenGL
@@ -458,9 +459,6 @@ import "C"
 import (
 	"errors"
 	"unsafe"
-
-	"azul3d.org/engine/gfx/internal/procaddr"
-	"azul3d.org/engine/gfx/internal/procaddr/auto"
 )
 
 const (
@@ -1147,9 +1145,13 @@ func Viewport(x int32, y int32, width int32, height int32) {
 	C.glowViewport(gpViewport, (C.GLint)(x), (C.GLint)(y), (C.GLsizei)(width), (C.GLsizei)(height))
 }
 func Init() error {
-	return InitWithProcAddrFunc(auto.GetProcAddress)
+	return InitWithProcAddrFunc(getProcAddress)
 }
-func InitWithProcAddrFunc(getProcAddr procaddr.GetProcAddressFunc) error {
+
+// InitWithProcAddrFunc intializes the package using the specified OpenGL
+// function pointer loading function. For more cases Init should be used
+// instead.
+func InitWithProcAddrFunc(getProcAddr func(name string) unsafe.Pointer) error {
 	gpActiveTexture = (C.GPACTIVETEXTURE)(getProcAddr("glActiveTexture"))
 	if gpActiveTexture == nil {
 		return errors.New("glActiveTexture")

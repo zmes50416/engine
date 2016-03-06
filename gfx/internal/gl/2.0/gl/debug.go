@@ -1,5 +1,6 @@
-// Glow automatically generated OpenGL binding: http://github.com/go-gl/glow
 // +build 386,!gles2 amd64,!gles2
+
+// Glow automatically generated OpenGL binding: http://github.com/go-gl/glow
 
 package gl
 

@@ -1,3 +1,5 @@
+// +build arm gles2
+
 // Glow automatically generated OpenGL binding: http://github.com/go-gl/glow
 // +build arm gles2
 

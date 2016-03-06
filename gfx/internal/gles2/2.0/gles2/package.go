@@ -1,3 +1,5 @@
+// +build arm gles2
+
 // Copyright (c) 2010 Khronos Group.
 // This material may be distributed subject to the terms and conditions
 // set forth in the Open Publication License, v 1.0, 8 June 1999.
@@ -6,7 +8,6 @@
 // Copyright (c) 1991-2006 Silicon Graphics, Inc.
 // This document is licensed under the SGI Free Software B License.
 // For details, see http://oss.sgi.com/projects/FreeB.
-// +build arm gles2
 
 // Package gles2 implements Go bindings to OpenGL.
 //
@@ -14,7 +15,7 @@
 //  http://github.com/go-gl/glow
 //
 // Generated based on the OpenGL XML specification:
-//  SVN revision 29209
+//  SVN revision 27695
 package gles2
 
 // #cgo darwin  LDFLAGS: -framework OpenGL
@@ -41,32 +42,20 @@ package gles2
 // typedef unsigned int GLbitfield;
 // typedef void GLvoid;
 // typedef int GLint;
-// typedef int GLclampx;
 // typedef unsigned int GLuint;
 // typedef int GLsizei;
-// typedef double GLdouble;
 // typedef void *GLeglImageOES;
 // typedef char GLchar;
 // typedef struct __GLsync *GLsync;
-// struct _cl_context;
-// struct _cl_event;
 // typedef void (APIENTRY *GLDEBUGPROC)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
-// typedef void (APIENTRY *GLDEBUGPROCARB)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
 // typedef void (APIENTRY *GLDEBUGPROCKHR)(GLenum source,GLenum type,GLuint id,GLenum severity,GLsizei length,const GLchar *message,const void *userParam);
-// typedef khronos_int8_t GLbyte;
 // typedef khronos_uint8_t GLubyte;
 // typedef khronos_float_t GLfloat;
 // typedef khronos_float_t GLclampf;
-// typedef khronos_int32_t GLfixed;
 // typedef khronos_int64_t GLint64;
 // typedef khronos_uint64_t GLuint64;
-// typedef khronos_uint64_t GLuint64EXT;
 // typedef khronos_intptr_t GLintptr;
 // typedef khronos_ssize_t GLsizeiptr;
-// extern void glowDebugCallback_gles220(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
-// static void APIENTRY glowCDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-//   glowDebugCallback_gles220(source, type, id, severity, length, message, userParam);
-// }
 // typedef void  (APIENTRYP GPACTIVETEXTURE)(GLenum  texture);
 // typedef void  (APIENTRYP GPATTACHSHADER)(GLuint  program, GLuint  shader);
 // typedef void  (APIENTRYP GPBINDBUFFER)(GLenum  target, GLuint  buffer);
@@ -87,7 +76,6 @@ package gles2
 // typedef GLuint  (APIENTRYP GPCREATEPROGRAM)();
 // typedef GLuint  (APIENTRYP GPCREATESHADER)(GLenum  type);
 // typedef void  (APIENTRYP GPCULLFACE)(GLenum  mode);
-// typedef void  (APIENTRYP GPDEBUGMESSAGECALLBACKARB)(GLDEBUGPROCARB  callback, const void * userParam);
 // typedef void  (APIENTRYP GPDELETEBUFFERS)(GLsizei  n, const GLuint * buffers);
 // typedef void  (APIENTRYP GPDELETEFRAMEBUFFERS)(GLsizei  n, const GLuint * framebuffers);
 // typedef void  (APIENTRYP GPDELETEPROGRAM)(GLuint  program);
@@ -124,7 +112,6 @@ package gles2
 // typedef GLint  (APIENTRYP GPGETUNIFORMLOCATION)(GLuint  program, const GLchar * name);
 // typedef void  (APIENTRYP GPLINKPROGRAM)(GLuint  program);
 // typedef void  (APIENTRYP GPREADPIXELS)(GLint  x, GLint  y, GLsizei  width, GLsizei  height, GLenum  format, GLenum  type, void * pixels);
-// typedef void  (APIENTRYP GPRENDERBUFFERSTORAGEMULTISAMPLE)(GLenum  target, GLsizei  samples, GLenum  internalformat, GLsizei  width, GLsizei  height);
 // typedef void  (APIENTRYP GPSCISSOR)(GLint  x, GLint  y, GLsizei  width, GLsizei  height);
 // typedef void  (APIENTRYP GPSHADERSOURCE)(GLuint  shader, GLsizei  count, const GLchar *const* string, const GLint * length);
 // typedef void  (APIENTRYP GPSTENCILFUNCSEPARATE)(GLenum  face, GLenum  func, GLint  ref, GLuint  mask);
@@ -202,9 +189,6 @@ package gles2
 // }
 // static void  glowCullFace(GPCULLFACE fnptr, GLenum  mode) {
 //   (*fnptr)(mode);
-// }
-// static void  glowDebugMessageCallbackARB(GPDEBUGMESSAGECALLBACKARB fnptr, GLDEBUGPROCARB  callback, const void * userParam) {
-//   (*fnptr)(glowCDebugCallback, userParam);
 // }
 // static void  glowDeleteBuffers(GPDELETEBUFFERS fnptr, GLsizei  n, const GLuint * buffers) {
 //   (*fnptr)(n, buffers);
@@ -314,9 +298,6 @@ package gles2
 // static void  glowReadPixels(GPREADPIXELS fnptr, GLint  x, GLint  y, GLsizei  width, GLsizei  height, GLenum  format, GLenum  type, void * pixels) {
 //   (*fnptr)(x, y, width, height, format, type, pixels);
 // }
-// static void  glowRenderbufferStorageMultisample(GPRENDERBUFFERSTORAGEMULTISAMPLE fnptr, GLenum  target, GLsizei  samples, GLenum  internalformat, GLsizei  width, GLsizei  height) {
-//   (*fnptr)(target, samples, internalformat, width, height);
-// }
 // static void  glowScissor(GPSCISSOR fnptr, GLint  x, GLint  y, GLsizei  width, GLsizei  height) {
 //   (*fnptr)(x, y, width, height);
 // }
@@ -375,9 +356,6 @@ import "C"
 import (
 	"errors"
 	"unsafe"
-
-	"azul3d.org/gfx.v2-dev/internal/procaddr"
-	"azul3d.org/gfx.v2-dev/internal/procaddr/auto"
 )
 
 const (
@@ -385,7 +363,6 @@ const (
 	ALWAYS                                    = 0x0207
 	ARRAY_BUFFER                              = 0x8892
 	BACK                                      = 0x0405
-	BGRA                                      = 0x80E1
 	BLEND                                     = 0x0BE2
 	BLEND_COLOR                               = 0x8005
 	BLEND_DST_ALPHA                           = 0x80CA
@@ -407,7 +384,6 @@ const (
 	CULL_FACE                                 = 0x0B44
 	CULL_FACE_MODE                            = 0x0B45
 	CURRENT_PROGRAM                           = 0x8B8D
-	DEBUG_OUTPUT_SYNCHRONOUS_ARB              = 0x8242
 	DEBUG_SEVERITY_HIGH                       = 0x9146
 	DEBUG_SEVERITY_LOW                        = 0x9148
 	DEBUG_SEVERITY_MEDIUM                     = 0x9147
@@ -419,11 +395,9 @@ const (
 	DEBUG_TYPE_UNDEFINED_BEHAVIOR             = 0x824E
 	DECR                                      = 0x1E03
 	DECR_WRAP                                 = 0x8508
-	DEPTH24_STENCIL8                          = 0x88F0
 	DEPTH_ATTACHMENT                          = 0x8D00
 	DEPTH_BITS                                = 0x0D56
 	DEPTH_BUFFER_BIT                          = 0x00000100
-	DEPTH_CLAMP                               = 0x864F
 	DEPTH_CLEAR_VALUE                         = 0x0B73
 	DEPTH_COMPONENT                           = 0x1902
 	DEPTH_COMPONENT16                         = 0x81A5
@@ -443,11 +417,7 @@ const (
 	FRAMEBUFFER_COMPLETE                      = 0x8CD5
 	FRAMEBUFFER_INCOMPLETE_ATTACHMENT         = 0x8CD6
 	FRAMEBUFFER_INCOMPLETE_DIMENSIONS         = 0x8CD9
-	FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER        = 0x8CDB
 	FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT = 0x8CD7
-	FRAMEBUFFER_INCOMPLETE_MULTISAMPLE        = 0x8D56
-	FRAMEBUFFER_INCOMPLETE_READ_BUFFER        = 0x8CDC
-	FRAMEBUFFER_UNDEFINED                     = 0x8219
 	FRAMEBUFFER_UNSUPPORTED                   = 0x8CDD
 	FRONT                                     = 0x0404
 	FRONT_AND_BACK                            = 0x0408
@@ -474,7 +444,6 @@ const (
 	LINES                                     = 0x0001
 	LINK_STATUS                               = 0x8B82
 	MAX_FRAGMENT_UNIFORM_VECTORS              = 0x8DFD
-	MAX_SAMPLES                               = 0x8D57
 	MAX_TEXTURE_SIZE                          = 0x0D33
 	MAX_VARYING_VECTORS                       = 0x8DFC
 	MAX_VERTEX_UNIFORM_VECTORS                = 0x8DFB
@@ -551,82 +520,80 @@ const (
 )
 
 var (
-	gpActiveTexture                  C.GPACTIVETEXTURE
-	gpAttachShader                   C.GPATTACHSHADER
-	gpBindBuffer                     C.GPBINDBUFFER
-	gpBindFramebuffer                C.GPBINDFRAMEBUFFER
-	gpBindRenderbuffer               C.GPBINDRENDERBUFFER
-	gpBindTexture                    C.GPBINDTEXTURE
-	gpBlendColor                     C.GPBLENDCOLOR
-	gpBlendEquationSeparate          C.GPBLENDEQUATIONSEPARATE
-	gpBlendFuncSeparate              C.GPBLENDFUNCSEPARATE
-	gpBufferData                     C.GPBUFFERDATA
-	gpCheckFramebufferStatus         C.GPCHECKFRAMEBUFFERSTATUS
-	gpClear                          C.GPCLEAR
-	gpClearColor                     C.GPCLEARCOLOR
-	gpClearDepthf                    C.GPCLEARDEPTHF
-	gpClearStencil                   C.GPCLEARSTENCIL
-	gpColorMask                      C.GPCOLORMASK
-	gpCompileShader                  C.GPCOMPILESHADER
-	gpCreateProgram                  C.GPCREATEPROGRAM
-	gpCreateShader                   C.GPCREATESHADER
-	gpCullFace                       C.GPCULLFACE
-	gpDebugMessageCallbackARB        C.GPDEBUGMESSAGECALLBACKARB
-	gpDeleteBuffers                  C.GPDELETEBUFFERS
-	gpDeleteFramebuffers             C.GPDELETEFRAMEBUFFERS
-	gpDeleteProgram                  C.GPDELETEPROGRAM
-	gpDeleteRenderbuffers            C.GPDELETERENDERBUFFERS
-	gpDeleteShader                   C.GPDELETESHADER
-	gpDeleteTextures                 C.GPDELETETEXTURES
-	gpDepthFunc                      C.GPDEPTHFUNC
-	gpDepthMask                      C.GPDEPTHMASK
-	gpDisable                        C.GPDISABLE
-	gpDisableVertexAttribArray       C.GPDISABLEVERTEXATTRIBARRAY
-	gpDrawArrays                     C.GPDRAWARRAYS
-	gpDrawElements                   C.GPDRAWELEMENTS
-	gpEnable                         C.GPENABLE
-	gpEnableVertexAttribArray        C.GPENABLEVERTEXATTRIBARRAY
-	gpFinish                         C.GPFINISH
-	gpFlush                          C.GPFLUSH
-	gpFramebufferRenderbuffer        C.GPFRAMEBUFFERRENDERBUFFER
-	gpFramebufferTexture2D           C.GPFRAMEBUFFERTEXTURE2D
-	gpGenBuffers                     C.GPGENBUFFERS
-	gpGenFramebuffers                C.GPGENFRAMEBUFFERS
-	gpGenRenderbuffers               C.GPGENRENDERBUFFERS
-	gpGenTextures                    C.GPGENTEXTURES
-	gpGenerateMipmap                 C.GPGENERATEMIPMAP
-	gpGetAttribLocation              C.GPGETATTRIBLOCATION
-	gpGetBooleanv                    C.GPGETBOOLEANV
-	gpGetError                       C.GPGETERROR
-	gpGetFloatv                      C.GPGETFLOATV
-	gpGetIntegerv                    C.GPGETINTEGERV
-	gpGetProgramInfoLog              C.GPGETPROGRAMINFOLOG
-	gpGetProgramiv                   C.GPGETPROGRAMIV
-	gpGetShaderInfoLog               C.GPGETSHADERINFOLOG
-	gpGetShaderiv                    C.GPGETSHADERIV
-	gpGetString                      C.GPGETSTRING
-	gpGetUniformLocation             C.GPGETUNIFORMLOCATION
-	gpLinkProgram                    C.GPLINKPROGRAM
-	gpReadPixels                     C.GPREADPIXELS
-	gpRenderbufferStorageMultisample C.GPRENDERBUFFERSTORAGEMULTISAMPLE
-	gpScissor                        C.GPSCISSOR
-	gpShaderSource                   C.GPSHADERSOURCE
-	gpStencilFuncSeparate            C.GPSTENCILFUNCSEPARATE
-	gpStencilMaskSeparate            C.GPSTENCILMASKSEPARATE
-	gpStencilOpSeparate              C.GPSTENCILOPSEPARATE
-	gpTexImage2D                     C.GPTEXIMAGE2D
-	gpTexParameterfv                 C.GPTEXPARAMETERFV
-	gpTexParameteri                  C.GPTEXPARAMETERI
-	gpUniform1fv                     C.GPUNIFORM1FV
-	gpUniform1i                      C.GPUNIFORM1I
-	gpUniform1iv                     C.GPUNIFORM1IV
-	gpUniform2fv                     C.GPUNIFORM2FV
-	gpUniform3fv                     C.GPUNIFORM3FV
-	gpUniform4fv                     C.GPUNIFORM4FV
-	gpUniformMatrix4fv               C.GPUNIFORMMATRIX4FV
-	gpUseProgram                     C.GPUSEPROGRAM
-	gpVertexAttribPointer            C.GPVERTEXATTRIBPOINTER
-	gpViewport                       C.GPVIEWPORT
+	gpActiveTexture            C.GPACTIVETEXTURE
+	gpAttachShader             C.GPATTACHSHADER
+	gpBindBuffer               C.GPBINDBUFFER
+	gpBindFramebuffer          C.GPBINDFRAMEBUFFER
+	gpBindRenderbuffer         C.GPBINDRENDERBUFFER
+	gpBindTexture              C.GPBINDTEXTURE
+	gpBlendColor               C.GPBLENDCOLOR
+	gpBlendEquationSeparate    C.GPBLENDEQUATIONSEPARATE
+	gpBlendFuncSeparate        C.GPBLENDFUNCSEPARATE
+	gpBufferData               C.GPBUFFERDATA
+	gpCheckFramebufferStatus   C.GPCHECKFRAMEBUFFERSTATUS
+	gpClear                    C.GPCLEAR
+	gpClearColor               C.GPCLEARCOLOR
+	gpClearDepthf              C.GPCLEARDEPTHF
+	gpClearStencil             C.GPCLEARSTENCIL
+	gpColorMask                C.GPCOLORMASK
+	gpCompileShader            C.GPCOMPILESHADER
+	gpCreateProgram            C.GPCREATEPROGRAM
+	gpCreateShader             C.GPCREATESHADER
+	gpCullFace                 C.GPCULLFACE
+	gpDeleteBuffers            C.GPDELETEBUFFERS
+	gpDeleteFramebuffers       C.GPDELETEFRAMEBUFFERS
+	gpDeleteProgram            C.GPDELETEPROGRAM
+	gpDeleteRenderbuffers      C.GPDELETERENDERBUFFERS
+	gpDeleteShader             C.GPDELETESHADER
+	gpDeleteTextures           C.GPDELETETEXTURES
+	gpDepthFunc                C.GPDEPTHFUNC
+	gpDepthMask                C.GPDEPTHMASK
+	gpDisable                  C.GPDISABLE
+	gpDisableVertexAttribArray C.GPDISABLEVERTEXATTRIBARRAY
+	gpDrawArrays               C.GPDRAWARRAYS
+	gpDrawElements             C.GPDRAWELEMENTS
+	gpEnable                   C.GPENABLE
+	gpEnableVertexAttribArray  C.GPENABLEVERTEXATTRIBARRAY
+	gpFinish                   C.GPFINISH
+	gpFlush                    C.GPFLUSH
+	gpFramebufferRenderbuffer  C.GPFRAMEBUFFERRENDERBUFFER
+	gpFramebufferTexture2D     C.GPFRAMEBUFFERTEXTURE2D
+	gpGenBuffers               C.GPGENBUFFERS
+	gpGenFramebuffers          C.GPGENFRAMEBUFFERS
+	gpGenRenderbuffers         C.GPGENRENDERBUFFERS
+	gpGenTextures              C.GPGENTEXTURES
+	gpGenerateMipmap           C.GPGENERATEMIPMAP
+	gpGetAttribLocation        C.GPGETATTRIBLOCATION
+	gpGetBooleanv              C.GPGETBOOLEANV
+	gpGetError                 C.GPGETERROR
+	gpGetFloatv                C.GPGETFLOATV
+	gpGetIntegerv              C.GPGETINTEGERV
+	gpGetProgramInfoLog        C.GPGETPROGRAMINFOLOG
+	gpGetProgramiv             C.GPGETPROGRAMIV
+	gpGetShaderInfoLog         C.GPGETSHADERINFOLOG
+	gpGetShaderiv              C.GPGETSHADERIV
+	gpGetString                C.GPGETSTRING
+	gpGetUniformLocation       C.GPGETUNIFORMLOCATION
+	gpLinkProgram              C.GPLINKPROGRAM
+	gpReadPixels               C.GPREADPIXELS
+	gpScissor                  C.GPSCISSOR
+	gpShaderSource             C.GPSHADERSOURCE
+	gpStencilFuncSeparate      C.GPSTENCILFUNCSEPARATE
+	gpStencilMaskSeparate      C.GPSTENCILMASKSEPARATE
+	gpStencilOpSeparate        C.GPSTENCILOPSEPARATE
+	gpTexImage2D               C.GPTEXIMAGE2D
+	gpTexParameterfv           C.GPTEXPARAMETERFV
+	gpTexParameteri            C.GPTEXPARAMETERI
+	gpUniform1fv               C.GPUNIFORM1FV
+	gpUniform1i                C.GPUNIFORM1I
+	gpUniform1iv               C.GPUNIFORM1IV
+	gpUniform2fv               C.GPUNIFORM2FV
+	gpUniform3fv               C.GPUNIFORM3FV
+	gpUniform4fv               C.GPUNIFORM4FV
+	gpUniformMatrix4fv         C.GPUNIFORMMATRIX4FV
+	gpUseProgram               C.GPUSEPROGRAM
+	gpVertexAttribPointer      C.GPVERTEXATTRIBPOINTER
+	gpViewport                 C.GPVIEWPORT
 )
 
 // Helper functions
@@ -734,10 +701,6 @@ func CreateShader(xtype uint32) uint32 {
 // specify whether front- or back-facing facets can be culled
 func CullFace(mode uint32) {
 	C.glowCullFace(gpCullFace, (C.GLenum)(mode))
-}
-func DebugMessageCallbackARB(callback DebugProc, userParam unsafe.Pointer) {
-	userDebugCallback = callback
-	C.glowDebugMessageCallbackARB(gpDebugMessageCallbackARB, (C.GLDEBUGPROCARB)(unsafe.Pointer(&callback)), userParam)
 }
 
 // delete named buffer objects
@@ -914,11 +877,6 @@ func ReadPixels(x int32, y int32, width int32, height int32, format uint32, xtyp
 	C.glowReadPixels(gpReadPixels, (C.GLint)(x), (C.GLint)(y), (C.GLsizei)(width), (C.GLsizei)(height), (C.GLenum)(format), (C.GLenum)(xtype), pixels)
 }
 
-// establish data storage, format, dimensions and sample count of     a renderbuffer object's image
-func RenderbufferStorageMultisample(target uint32, samples int32, internalformat uint32, width int32, height int32) {
-	C.glowRenderbufferStorageMultisample(gpRenderbufferStorageMultisample, (C.GLenum)(target), (C.GLsizei)(samples), (C.GLenum)(internalformat), (C.GLsizei)(width), (C.GLsizei)(height))
-}
-
 // define the scissor box
 func Scissor(x int32, y int32, width int32, height int32) {
 	C.glowScissor(gpScissor, (C.GLint)(x), (C.GLint)(y), (C.GLsizei)(width), (C.GLsizei)(height))
@@ -1005,9 +963,13 @@ func Viewport(x int32, y int32, width int32, height int32) {
 	C.glowViewport(gpViewport, (C.GLint)(x), (C.GLint)(y), (C.GLsizei)(width), (C.GLsizei)(height))
 }
 func Init() error {
-	return InitWithProcAddrFunc(auto.GetProcAddress)
+	return InitWithProcAddrFunc(getProcAddress)
 }
-func InitWithProcAddrFunc(getProcAddr procaddr.GetProcAddressFunc) error {
+
+// InitWithProcAddrFunc intializes the package using the specified OpenGL
+// function pointer loading function. For more cases Init should be used
+// instead.
+func InitWithProcAddrFunc(getProcAddr func(name string) unsafe.Pointer) error {
 	gpActiveTexture = (C.GPACTIVETEXTURE)(getProcAddr("glActiveTexture"))
 	if gpActiveTexture == nil {
 		return errors.New("glActiveTexture")
@@ -1088,7 +1050,6 @@ func InitWithProcAddrFunc(getProcAddr procaddr.GetProcAddressFunc) error {
 	if gpCullFace == nil {
 		return errors.New("glCullFace")
 	}
-	gpDebugMessageCallbackARB = (C.GPDEBUGMESSAGECALLBACKARB)(getProcAddr("glDebugMessageCallbackARB"))
 	gpDeleteBuffers = (C.GPDELETEBUFFERS)(getProcAddr("glDeleteBuffers"))
 	if gpDeleteBuffers == nil {
 		return errors.New("glDeleteBuffers")
@@ -1233,7 +1194,6 @@ func InitWithProcAddrFunc(getProcAddr procaddr.GetProcAddressFunc) error {
 	if gpReadPixels == nil {
 		return errors.New("glReadPixels")
 	}
-	gpRenderbufferStorageMultisample = (C.GPRENDERBUFFERSTORAGEMULTISAMPLE)(getProcAddr("glRenderbufferStorageMultisample"))
 	gpScissor = (C.GPSCISSOR)(getProcAddr("glScissor"))
 	if gpScissor == nil {
 		return errors.New("glScissor")
