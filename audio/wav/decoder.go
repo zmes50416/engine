@@ -119,8 +119,8 @@ func (d *decoder) Seek(sample uint64) error {
 	return nil
 }
 
-func (d *decoder) readPCM8(b audio.Slice) (read int, err error) {
-	bb, bbOk := b.(audio.PCM8Samples)
+func (d *decoder) readUint8(b audio.Slice) (read int, err error) {
+	bb, bbOk := b.(audio.Uint8)
 
 	var (
 		sample uint8
@@ -142,9 +142,9 @@ func (d *decoder) readPCM8(b audio.Slice) (read int, err error) {
 		sample = buf[0]
 
 		if bbOk {
-			bb[read] = audio.PCM8(sample)
+			bb[read] = sample
 		} else {
-			f64 := audio.PCM8ToF64(audio.PCM8(sample))
+			f64 := audio.Uint8ToFloat64(sample)
 			b.Set(read, f64)
 		}
 	}
@@ -152,8 +152,8 @@ func (d *decoder) readPCM8(b audio.Slice) (read int, err error) {
 	return
 }
 
-func (d *decoder) readPCM16(b audio.Slice) (read int, err error) {
-	bb, bbOk := b.(audio.PCM16Samples)
+func (d *decoder) readInt16(b audio.Slice) (read int, err error) {
+	bb, bbOk := b.(audio.Int16)
 
 	var (
 		sample int16
@@ -175,9 +175,9 @@ func (d *decoder) readPCM16(b audio.Slice) (read int, err error) {
 		sample = int16(binary.LittleEndian.Uint16(buf))
 
 		if bbOk {
-			bb[read] = audio.PCM16(sample)
+			bb[read] = sample
 		} else {
-			f64 := audio.PCM16ToF64(audio.PCM16(sample))
+			f64 := audio.Int16ToFloat64(sample)
 			b.Set(read, f64)
 		}
 	}
@@ -185,8 +185,8 @@ func (d *decoder) readPCM16(b audio.Slice) (read int, err error) {
 	return
 }
 
-func (d *decoder) readPCM24(b audio.Slice) (read int, err error) {
-	bb, bbOk := b.(audio.PCM32Samples)
+func (d *decoder) readInt24(b audio.Slice) (read int, err error) {
+	bb, bbOk := b.(audio.Int32)
 
 	var (
 		sample []byte
@@ -205,8 +205,8 @@ func (d *decoder) readPCM24(b audio.Slice) (read int, err error) {
 			return
 		}
 
-		var ss audio.PCM32
-		ss = audio.PCM32(sample[0]) | audio.PCM32(sample[1])<<8 | audio.PCM32(sample[2])<<16
+		var ss int32
+		ss = int32(sample[0]) | int32(sample[1])<<8 | int32(sample[2])<<16
 		if (ss & 0x800000) > 0 {
 			ss |= ^0xffffff
 		}
@@ -214,7 +214,7 @@ func (d *decoder) readPCM24(b audio.Slice) (read int, err error) {
 		if bbOk {
 			bb[read] = ss
 		} else {
-			f64 := audio.PCM32ToF64(ss)
+			f64 := audio.Int32ToFloat64(ss)
 			b.Set(read, f64)
 		}
 	}
@@ -222,8 +222,8 @@ func (d *decoder) readPCM24(b audio.Slice) (read int, err error) {
 	return
 }
 
-func (d *decoder) readPCM32(b audio.Slice) (read int, err error) {
-	bb, bbOk := b.(audio.PCM32Samples)
+func (d *decoder) readInt32(b audio.Slice) (read int, err error) {
+	bb, bbOk := b.(audio.Int32)
 
 	var (
 		sample int32
@@ -245,9 +245,9 @@ func (d *decoder) readPCM32(b audio.Slice) (read int, err error) {
 		sample = int32(binary.LittleEndian.Uint32(buf))
 
 		if bbOk {
-			bb[read] = audio.PCM32(sample)
+			bb[read] = sample
 		} else {
-			f64 := audio.PCM32ToF64(audio.PCM32(sample))
+			f64 := audio.Int32ToFloat64(sample)
 			b.Set(read, f64)
 		}
 	}
@@ -255,8 +255,8 @@ func (d *decoder) readPCM32(b audio.Slice) (read int, err error) {
 	return
 }
 
-func (d *decoder) readF32(b audio.Slice) (read int, err error) {
-	bb, bbOk := b.(audio.F32Samples)
+func (d *decoder) readFloat32(b audio.Slice) (read int, err error) {
+	bb, bbOk := b.(audio.Float32)
 
 	var (
 		sample uint32
@@ -278,16 +278,16 @@ func (d *decoder) readF32(b audio.Slice) (read int, err error) {
 		sample = binary.LittleEndian.Uint32(buf)
 
 		if bbOk {
-			bb[read] = audio.F32(math.Float32frombits(sample))
+			bb[read] = math.Float32frombits(sample)
 		} else {
-			b.Set(read, audio.F64(math.Float32frombits(sample)))
+			b.Set(read, float64(math.Float32frombits(sample)))
 		}
 	}
 
 	return
 }
 
-func (d *decoder) readF64(b audio.Slice) (read int, err error) {
+func (d *decoder) readFloat64(b audio.Slice) (read int, err error) {
 	var (
 		sample uint64
 		length = b.Len()
@@ -307,14 +307,14 @@ func (d *decoder) readF64(b audio.Slice) (read int, err error) {
 		}
 		sample = binary.LittleEndian.Uint64(buf)
 
-		b.Set(read, audio.F64(math.Float64frombits(sample)))
+		b.Set(read, math.Float64frombits(sample))
 	}
 
 	return
 }
 
 func (d *decoder) readMuLaw(b audio.Slice) (read int, err error) {
-	bb, bbOk := b.(audio.MuLawSamples)
+	bb, bbOk := b.(audio.MuLaw)
 
 	var (
 		sample uint8
@@ -336,10 +336,10 @@ func (d *decoder) readMuLaw(b audio.Slice) (read int, err error) {
 		sample = buf[0]
 
 		if bbOk {
-			bb[read] = audio.MuLaw(sample)
+			bb[read] = sample
 		} else {
-			p16 := audio.MuLawToPCM16(audio.MuLaw(sample))
-			b.Set(read, audio.PCM16ToF64(p16))
+			p16 := audio.MuLawToInt16(sample)
+			b.Set(read, audio.Int16ToFloat64(p16))
 		}
 	}
 
@@ -347,7 +347,7 @@ func (d *decoder) readMuLaw(b audio.Slice) (read int, err error) {
 }
 
 func (d *decoder) readALaw(b audio.Slice) (read int, err error) {
-	bb, bbOk := b.(audio.ALawSamples)
+	bb, bbOk := b.(audio.ALaw)
 	if !bbOk {
 		panic("oops")
 	}
@@ -372,10 +372,10 @@ func (d *decoder) readALaw(b audio.Slice) (read int, err error) {
 		sample = buf[0]
 
 		if bbOk {
-			bb[read] = audio.ALaw(sample)
+			bb[read] = sample
 		} else {
-			p16 := audio.ALawToPCM16(audio.ALaw(sample))
-			b.Set(read, audio.PCM16ToF64(p16))
+			p16 := audio.ALawToInt16(sample)
+			b.Set(read, audio.Int16ToFloat64(p16))
 		}
 	}
 
@@ -394,13 +394,13 @@ func (d *decoder) Read(b audio.Slice) (read int, err error) {
 	case wave_FORMAT_PCM:
 		switch d.bitsPerSample {
 		case 8:
-			return d.readPCM8(b)
+			return d.readUint8(b)
 		case 16:
-			return d.readPCM16(b)
+			return d.readInt16(b)
 		case 24:
-			return d.readPCM24(b)
+			return d.readInt24(b)
 		case 32:
-			return d.readPCM32(b)
+			return d.readInt32(b)
 		default:
 			panic("invalid bits per sample")
 		}
@@ -408,9 +408,9 @@ func (d *decoder) Read(b audio.Slice) (read int, err error) {
 	case wave_FORMAT_IEEE_FLOAT:
 		switch d.bitsPerSample {
 		case 32:
-			return d.readF32(b)
+			return d.readFloat32(b)
 		case 64:
-			return d.readF64(b)
+			return d.readFloat64(b)
 		default:
 			panic("invalid bits per sample")
 		}

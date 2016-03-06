@@ -87,7 +87,7 @@ func TestDecodeFloat32(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		start: audio.F32Samples{0, 0, 9.682657e-08, 3.3106906e-10, 9.845178e-07, 3.9564156e-09, 3.711236e-06, 1.869304e-08, 8.562939e-06, 5.7355663e-08, 1.4786613e-05, 1.3752022e-07, 2.1342606e-05, 2.8124632e-07, 2.7840168e-05},
+		start: audio.Float32{0, 0, 9.682657e-08, 3.3106906e-10, 9.845178e-07, 3.9564156e-09, 3.711236e-06, 1.869304e-08, 8.562939e-06, 5.7355663e-08, 1.4786613e-05, 1.3752022e-07, 2.1342606e-05, 2.8124632e-07, 2.7840168e-05},
 	})
 }
 
@@ -99,7 +99,7 @@ func TestDecodeFloat64(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		start: audio.F64Samples{0, 0, 9.682656809673063e-08, 3.31069061054734e-10, 9.845177828537999e-07, 3.9564156395499595e-09, 3.7112361042090924e-06, 1.8693040004791328e-08, 8.56293900142191e-06, 5.7355663329872186e-08, 1.4786613064643461e-05, 1.375202174358492e-07, 2.134260648745112e-05, 2.812463151258271e-07, 2.7840167604153976e-05},
+		start: audio.Float64{0, 0, 9.682656809673063e-08, 3.31069061054734e-10, 9.845177828537999e-07, 3.9564156395499595e-09, 3.7112361042090924e-06, 1.8693040004791328e-08, 8.56293900142191e-06, 5.7355663329872186e-08, 1.4786613064643461e-05, 1.375202174358492e-07, 2.134260648745112e-05, 2.812463151258271e-07, 2.7840167604153976e-05},
 	})
 }
 
@@ -111,7 +111,7 @@ func TestDecodeUInt8(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		start: audio.PCM8Samples{128, 128, 128, 128, 128, 128, 127, 127, 128, 128, 128, 128, 128, 127, 128},
+		start: audio.Uint8{128, 128, 128, 128, 128, 128, 127, 127, 128, 128, 128, 128, 128, 127, 128},
 	})
 }
 
@@ -123,7 +123,7 @@ func TestDecodeInt16(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		start: audio.PCM16Samples{0, 0, 0, 0, 1, 0, -1, 0, 1, -1, -1, 2, 3, -2, 0},
+		start: audio.Int16{0, 0, 0, 0, 1, 0, -1, 0, 1, -1, -1, 2, 3, -2, 0},
 	})
 }
 
@@ -135,7 +135,7 @@ func TestDecodeInt24(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		start: audio.PCM32Samples{0, 0, 0, 0, 8, 0, 31, 0, 71, 0, 124, 1, 179, 2, 233},
+		start: audio.Int32{0, 0, 0, 0, 8, 0, 31, 0, 71, 0, 124, 1, 179, 2, 233},
 	})
 }
 
@@ -147,7 +147,7 @@ func TestDecodeInt32(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		start: audio.PCM32Samples{0, 0, 208, 1, 2114, 8, 7970, 40, 18389, 123, 31754, 295, 45833, 604, 59786},
+		start: audio.Int32{0, 0, 208, 1, 2114, 8, 7970, 40, 18389, 123, 31754, 295, 45833, 604, 59786},
 	})
 }
 
@@ -159,7 +159,7 @@ func TestDecodeALaw(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		start: audio.ALawSamples{213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 85, 213},
+		start: audio.ALaw{213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 85, 213},
 	})
 }
 
@@ -171,7 +171,7 @@ func TestDecodeMuLaw(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		start: audio.MuLawSamples{127, 255, 255, 255, 127, 127, 255, 255, 127, 127, 255, 255, 127, 127, 255},
+		start: audio.MuLaw{127, 255, 255, 255, 127, 127, 255, 255, 127, 127, 255, 255, 127, 127, 255},
 	})
 }
 
@@ -218,33 +218,33 @@ func benchDecode(b *testing.B, fmt audio.Slice, path string) {
 }
 
 func BenchmarkDecodeFloat32(b *testing.B) {
-	benchDecode(b, audio.F32Samples{}, "testdata/tune_stereo_44100hz_float32.wav")
+	benchDecode(b, audio.Float32{}, "testdata/tune_stereo_44100hz_float32.wav")
 }
 
 func BenchmarkDecodeFloat64(b *testing.B) {
-	benchDecode(b, audio.F64Samples{}, "testdata/tune_stereo_44100hz_float64.wav")
+	benchDecode(b, audio.Float64{}, "testdata/tune_stereo_44100hz_float64.wav")
 }
 
 func BenchmarkDecodeUint8(b *testing.B) {
-	benchDecode(b, audio.PCM8Samples{}, "testdata/tune_stereo_44100hz_uint8.wav")
+	benchDecode(b, audio.Uint8{}, "testdata/tune_stereo_44100hz_uint8.wav")
 }
 
 func BenchmarkDecodeInt16(b *testing.B) {
-	benchDecode(b, audio.PCM16Samples{}, "testdata/tune_stereo_44100hz_int16.wav")
+	benchDecode(b, audio.Int16{}, "testdata/tune_stereo_44100hz_int16.wav")
 }
 
 func BenchmarkDecodeInt24(b *testing.B) {
-	benchDecode(b, audio.PCM32Samples{}, "testdata/tune_stereo_44100hz_int24.wav")
+	benchDecode(b, audio.Int32{}, "testdata/tune_stereo_44100hz_int24.wav")
 }
 
 func BenchmarkDecodeInt32(b *testing.B) {
-	benchDecode(b, audio.PCM32Samples{}, "testdata/tune_stereo_44100hz_int32.wav")
+	benchDecode(b, audio.Int32{}, "testdata/tune_stereo_44100hz_int32.wav")
 }
 
 func BenchmarkDecodeALaw(b *testing.B) {
-	benchDecode(b, audio.ALawSamples{}, "testdata/tune_stereo_44100hz_alaw.wav")
+	benchDecode(b, audio.ALaw{}, "testdata/tune_stereo_44100hz_alaw.wav")
 }
 
 func BenchmarkDecodeMuLaw(b *testing.B) {
-	benchDecode(b, audio.MuLawSamples{}, "testdata/tune_stereo_44100hz_mulaw.wav")
+	benchDecode(b, audio.MuLaw{}, "testdata/tune_stereo_44100hz_mulaw.wav")
 }
