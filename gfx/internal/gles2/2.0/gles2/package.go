@@ -1,5 +1,3 @@
-// +build arm gles2
-
 // Copyright (c) 2010 Khronos Group.
 // This material may be distributed subject to the terms and conditions
 // set forth in the Open Publication License, v 1.0, 8 June 1999.

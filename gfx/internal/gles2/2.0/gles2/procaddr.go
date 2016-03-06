@@ -1,5 +1,3 @@
-// +build arm gles2
-
 // This file implements GlowGetProcAddress for every supported platform. The
 // correct version is chosen automatically based on build tags:
 // windows: WGL
