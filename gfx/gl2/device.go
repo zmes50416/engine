@@ -427,10 +427,6 @@ func (r *device) performScissor(rect image.Rectangle) {
 	}
 }
 
-func glStr(s string) *uint8 {
-	return gl.Str(s + "\x00")
-}
-
 // Initialization of OpenGL in two seperate thread at the same time is racy
 // because it is storing information on the OpenGL function pointers.
 var initLock sync.Mutex

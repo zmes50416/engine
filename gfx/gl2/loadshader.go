@@ -198,10 +198,10 @@ func (r *device) LoadShader(s *gfx.Shader, done chan *gfx.Shader) {
 		if len(s.Error) == 0 {
 			native.LocationCache = &glutil.LocationCache{
 				GetAttribLocation: func(name string) int {
-					return int(gl.GetAttribLocation(native.program, glStr(name)))
+					return int(gl.GetAttribLocation(native.program, gl.Str(name+"\x00")))
 				},
 				GetUniformLocation: func(name string) int {
-					return int(gl.GetUniformLocation(native.program, glStr(name)))
+					return int(gl.GetUniformLocation(native.program, gl.Str(name+"\x00")))
 				},
 			}
 
