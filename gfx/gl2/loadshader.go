@@ -109,10 +109,10 @@ func (r *device) LoadShader(s *gfx.Shader, done chan *gfx.Shader) {
 
 		// Compile vertex shader.
 		native.vertex = gl.CreateShader(gl.VERTEX_SHADER)
-		lengths := int32(len(s.GLSL.Vertex))
-		sources := &s.GLSL.Vertex[0]
-		gl.ShaderSource(native.vertex, 1, &sources, &lengths)
+		sources, free := gl.Strs(string(s.GLSL.Vertex) + "\x00")
+		gl.ShaderSource(native.vertex, 1, sources, nil) // TODO(slimsag): use length parameter instead of null terminator
 		gl.CompileShader(native.vertex)
+		free()
 
 		// Check if the shader compiled or not.
 		log, compiled := shaderCompilerLog(native.vertex)
@@ -132,10 +132,10 @@ func (r *device) LoadShader(s *gfx.Shader, done chan *gfx.Shader) {
 
 		// Compile fragment shader.
 		native.fragment = gl.CreateShader(gl.FRAGMENT_SHADER)
-		lengths = int32(len(s.GLSL.Fragment))
-		sources = &s.GLSL.Fragment[0]
-		gl.ShaderSource(native.fragment, 1, &sources, &lengths)
+		sources, free = gl.Strs(string(s.GLSL.Fragment) + "\x00")
+		gl.ShaderSource(native.fragment, 1, sources, nil) // TODO(slimsag): use length parameter instead of null terminator
 		gl.CompileShader(native.fragment)
+		free()
 
 		// Check if the shader compiled or not.
 		log, compiled = shaderCompilerLog(native.fragment)
