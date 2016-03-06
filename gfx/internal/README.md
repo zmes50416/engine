@@ -24,5 +24,5 @@ To regenerate the bindings you must:
 ```
 cd azul3d.org/gfx/internal
 glow download
-./generate.sh
+go generate
 ```
