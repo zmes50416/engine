@@ -26,6 +26,7 @@ func testDecode(t *testing.T, tst decodeTest) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer file.Close()
 
 	// Create a decoder for the audio source
 	decoder, format, err := audio.NewDecoder(file)
