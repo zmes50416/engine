@@ -6,7 +6,7 @@
 // interface of azul3d.org/audio.v1.
 //
 // NOTE: This package is a work in progress. The implementation is incomplete
-// and subject to change. The documentation can be inaccurate.
+// and subject to change. The documentation may be inaccurate.
 package flac
 
 import (
@@ -15,8 +15,8 @@ import (
 	"io"
 
 	"azul3d.org/engine/audio"
-	"gopkg.in/mewkiz/flac.v1"
-	"gopkg.in/mewkiz/flac.v1/frame"
+	"github.com/mewkiz/flac"
+	"github.com/mewkiz/flac/frame"
 )
 
 func init() {
@@ -79,25 +79,25 @@ func (dec *decoder) Read(b audio.Slice) (n int, err error) {
 	// The set closure sets the i:th sample of b to sample.
 	var set func(i int, sample int32)
 	switch v := b.(type) {
-	case audio.PCM8Samples:
+	case audio.Uint8:
 		set = func(i int, sample int32) {
 			// Unsigned 8-bit PCM audio sample.
-			v[i] = audio.PCM8(0x80 + sample)
+			v[i] = uint8(0x80 + sample)
 		}
-	case audio.PCM16Samples:
+	case audio.Int16:
 		set = func(i int, sample int32) {
 			// Signed 16-bit PCM audio sample.
-			v[i] = audio.PCM16(sample)
+			v[i] = int16(sample)
 		}
-	case audio.PCM32Samples:
+	case audio.Int32:
 		set = func(i int, sample int32) {
 			// Signed 32-bit PCM audio sample.
-			v[i] = audio.PCM32(sample)
+			v[i] = sample
 		}
 	default:
 		set = func(i int, sample int32) {
 			// Generic implementation.
-			f := pcmToF64(sample, dec.stream.Info.BitsPerSample)
+			f := intToFloat64(sample, dec.stream.Info.BitsPerSample)
 			b.Set(i, f)
 		}
 	}
@@ -147,19 +147,19 @@ func (dec *decoder) Read(b audio.Slice) (n int, err error) {
 	}
 }
 
-// pcmToF64 converts a signed bps-bit linear PCM audio sample to a 64-bit
+// intToFloat64 converts a signed bps-bit linear PCM audio sample to a 64-bit
 // floating-point linear audio sample in the range of -1 to +1.
-func pcmToF64(sample int32, bps uint8) audio.F64 {
+func intToFloat64(sample int32, bps uint8) float64 {
 	switch bps {
 	case 8:
 		// Unsigned 8-bit PCM audio sample.
-		return audio.PCM8ToF64(audio.PCM8(0x80 + sample))
+		return audio.Uint8ToFloat64(uint8(0x80 + sample))
 	case 16:
 		// Signed 16-bit PCM audio sample.
-		return audio.PCM16ToF64(audio.PCM16(sample))
+		return audio.Int16ToFloat64(int16(sample))
 	case 24:
 		// Signed 32-bit PCM audio sample.
-		return audio.PCM32ToF64(audio.PCM32(sample))
+		return audio.Int32ToFloat64(sample)
 	default:
 		panic(fmt.Sprintf("not yet implemented; conversion from %d-bit PCM to F64", bps))
 	}

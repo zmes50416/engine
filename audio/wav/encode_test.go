@@ -19,7 +19,7 @@ type encodeTest struct {
 }
 
 func countFill(s audio.Slice) {
-	var x audio.F64
+	var x float64
 	for i := 0; i < s.Len(); i++ {
 		s.Set(i, x)
 		x += 1.0
@@ -120,7 +120,7 @@ func testEncode(t *testing.T, tst encodeTest) {
 
 	// Right now the encoder only supports PCM16, so we use that directly.
 	//lossyBuf := tst.format.Make(buf.Len(), buf.Len())
-	lossyBuf := make(audio.PCM16Samples, buf.Len())
+	lossyBuf := make(audio.Int16, buf.Len())
 	buf.CopyTo(lossyBuf)
 	lossyBuf.CopyTo(buf)
 
@@ -143,7 +143,7 @@ func TestEncodeFloat32(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		format: audio.F32Samples{},
+		format: audio.Float32{},
 	})
 }
 
@@ -153,7 +153,7 @@ func TestEncodeFloat64(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		format: audio.F64Samples{},
+		format: audio.Float64{},
 	})
 }
 
@@ -163,7 +163,7 @@ func TestEncodeUInt8(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		format: audio.PCM8Samples{},
+		format: audio.Uint8{},
 	})
 }
 
@@ -173,7 +173,7 @@ func TestEncodeInt16(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		format: audio.PCM16Samples{},
+		format: audio.Int16{},
 	})
 }
 
@@ -183,7 +183,7 @@ func TestEncodeInt32(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		format: audio.PCM32Samples{},
+		format: audio.Int32{},
 	})
 }
 
@@ -193,7 +193,7 @@ func TestEncodeALaw(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		format: audio.ALawSamples{},
+		format: audio.ALaw{},
 	})
 }
 
@@ -203,7 +203,7 @@ func TestEncodeMuLaw(t *testing.T) {
 			SampleRate: 44100,
 			Channels:   2,
 		},
-		format: audio.MuLawSamples{},
+		format: audio.MuLaw{},
 	})
 }
 
@@ -264,33 +264,33 @@ func benchEncode(b *testing.B, format audio.Slice) {
 }
 
 func BenchmarkEncodeFloat32(b *testing.B) {
-	benchEncode(b, audio.F32Samples{})
+	benchEncode(b, audio.Float32{})
 }
 
 func BenchmarkEncodeFloat64(b *testing.B) {
-	benchEncode(b, audio.F64Samples{})
+	benchEncode(b, audio.Float64{})
 }
 
 func BenchmarkEncodeUint8(b *testing.B) {
-	benchEncode(b, audio.PCM8Samples{})
+	benchEncode(b, audio.Uint8{})
 }
 
 func BenchmarkEncodeInt16(b *testing.B) {
-	benchEncode(b, audio.PCM16Samples{})
+	benchEncode(b, audio.Int16{})
 }
 
 func BenchmarkEncodeInt24(b *testing.B) {
-	benchEncode(b, audio.PCM32Samples{})
+	benchEncode(b, audio.Int32{})
 }
 
 func BenchmarkEncodeInt32(b *testing.B) {
-	benchEncode(b, audio.PCM32Samples{})
+	benchEncode(b, audio.Int32{})
 }
 
 func BenchmarkEncodeALaw(b *testing.B) {
-	benchEncode(b, audio.ALawSamples{})
+	benchEncode(b, audio.ALaw{})
 }
 
 func BenchmarkEncodeMuLaw(b *testing.B) {
-	benchEncode(b, audio.MuLawSamples{})
+	benchEncode(b, audio.MuLaw{})
 }

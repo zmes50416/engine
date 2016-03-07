@@ -62,7 +62,7 @@ func (enc *encoder) Write(b audio.Slice) (n int, err error) {
 	var buf [3]byte
 	var at func(i int) []byte
 	switch v := b.(type) {
-	case audio.PCM16Samples:
+	case audio.Int16:
 		at = func(i int) []byte {
 			// Signed 16-bit PCM audio sample.
 			sample := v[i]
@@ -75,7 +75,7 @@ func (enc *encoder) Write(b audio.Slice) (n int, err error) {
 			// Generic implementation.
 			// TODO(u): Update to support 32-bit PCM audio samples, once the rest of
 			// the encoder does so.
-			sample := audio.F64ToPCM16(b.At(i))
+			sample := audio.Float64ToInt16(b.At(i))
 			buf[0] = uint8(sample)
 			buf[1] = uint8(sample >> 8)
 			return buf[:2]
