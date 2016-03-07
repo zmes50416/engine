@@ -138,10 +138,9 @@ func (dec *decoder) Read(b audio.Slice) (n int, err error) {
 						dec.i = i
 					}
 					return n, nil
-				} else {
-					set(n, sample)
-					n++
 				}
+				set(n, sample)
+				n++
 			}
 		}
 	}
