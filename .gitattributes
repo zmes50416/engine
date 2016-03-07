@@ -8,3 +8,4 @@ native/al/blob_darwin_amd64.go filter=lfs diff=lfs merge=lfs -text
 native/al/blobs/darwin_amd64/openal filter=lfs diff=lfs merge=lfs -text
 native/al/blobs/linux_amd64/openal filter=lfs diff=lfs merge=lfs -text
 native/al/blobs/windows_amd64/openal filter=lfs diff=lfs merge=lfs -text
+*.flac filter=lfs diff=lfs merge=lfs -text
