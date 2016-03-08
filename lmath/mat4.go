@@ -236,6 +236,22 @@ func (a Mat4) Transposed() Mat4 {
 	return a
 }
 
+// Determinant calculates and returns the determinant of the matrix.
+func (a Mat4) Determinant() float64 {
+	return a[0][0]*(a[1][1]*(a[2][2]*a[3][3]-a[2][3]*a[3][2])-
+		a[1][2]*(a[2][1]*a[3][3]-a[2][3]*a[3][1])+
+		a[1][3]*(a[2][1]*a[3][2]-a[2][2]*a[3][1])) -
+		a[0][1]*(a[1][0]*(a[2][2]*a[3][3]-a[2][3]*a[3][2])-
+			a[1][2]*(a[2][0]*a[3][3]-a[2][3]*a[3][0])+
+			a[1][3]*(a[2][0]*a[3][2]-a[2][2]*a[3][0])) +
+		a[0][2]*(a[1][0]*(a[2][1]*a[3][3]-a[2][3]*a[3][1])-
+			a[1][1]*(a[2][0]*a[3][3]-a[2][3]*a[3][0])+
+			a[1][3]*(a[2][0]*a[3][1]-a[2][1]*a[3][0])) -
+		a[0][3]*(a[1][0]*(a[2][1]*a[3][2]-a[2][2]*a[3][1])-
+			a[1][1]*(a[2][0]*a[3][2]-a[2][2]*a[3][0])+
+			a[1][2]*(a[2][0]*a[3][1]-a[2][1]*a[3][0]))
+}
+
 // SetUpperMat3 sets the upper-left 3x3 matrix to the specified one and returns
 // the new 4x4 matrix.
 func (a Mat4) SetUpperMat3(b Mat3) Mat4 {
