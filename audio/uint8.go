@@ -27,7 +27,7 @@ func Float64ToUint8(s float64) uint8 {
 	// In -1 to +1 range, switch to 0 to 1
 	s++
 	s /= 2
-	return uint8(math.Floor(float64((s * float64(math.MaxUint8)) + 0.5)))
+	return uint8(math.Floor((s * float64(math.MaxUint8)) + 0.5))
 }
 
 // Len implements the Slice interface.

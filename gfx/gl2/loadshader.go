@@ -73,7 +73,7 @@ func shaderCompilerLog(s uint32) (log []byte, compiled bool) {
 	}
 
 	log = make([]uint8, logSize)
-	gl.GetShaderInfoLog(s, int32(logSize), nil, &log[0])
+	gl.GetShaderInfoLog(s, logSize, nil, &log[0])
 
 	// Strip the null-termination byte.
 	log = log[:len(log)-1]
@@ -170,7 +170,7 @@ func (r *device) LoadShader(s *gfx.Shader, done chan *gfx.Shader) {
 
 			if logSize > 0 {
 				log = make([]byte, logSize)
-				gl.GetProgramInfoLog(native.program, int32(logSize), nil, &log[0])
+				gl.GetProgramInfoLog(native.program, logSize, nil, &log[0])
 
 				// Strip the null-termination byte.
 				log = log[:len(log)-1]

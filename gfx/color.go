@@ -32,10 +32,10 @@ func colorModel(c color.Color) color.Color {
 	}
 	r, g, b, a := c.RGBA()
 	return Color{
-		R: float32(r) / float32(fMaxUint16),
-		G: float32(g) / float32(fMaxUint16),
-		B: float32(b) / float32(fMaxUint16),
-		A: float32(a) / float32(fMaxUint16),
+		R: float32(r) / fMaxUint16,
+		G: float32(g) / fMaxUint16,
+		B: float32(b) / fMaxUint16,
+		A: float32(a) / fMaxUint16,
 	}
 }
 

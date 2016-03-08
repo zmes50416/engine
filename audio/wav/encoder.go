@@ -104,7 +104,7 @@ func (enc *encoder) Close() error {
 	enc.bw.Flush()
 
 	// Correct the size field of the RIFF type chunk header.
-	dataSize := uint32(enc.nsamples * uint32(enc.bps) / 8)
+	dataSize := enc.nsamples * uint32(enc.bps) / 8
 	riffSize := 4 + 24 + 8 + dataSize
 	off := int64(4)
 	_, err := enc.ws.Seek(off, os.SEEK_SET)

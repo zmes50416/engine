@@ -18,7 +18,7 @@ func Int16ToFloat64(s int16) float64 {
 
 // Float64ToInt16 converts a Float64 encoded audio sample to Int16.
 func Float64ToInt16(s float64) int16 {
-	return int16(math.Floor(float64((s * float64(math.MaxInt16)) + 0.5)))
+	return int16(math.Floor((s * float64(math.MaxInt16)) + 0.5))
 }
 
 // Len implements the Slice interface.
