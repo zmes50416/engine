@@ -56,7 +56,7 @@ type glfwWindow struct {
 	mouse                                              *mouse.Watcher
 	keyboard                                           *keyboard.Watcher
 	extWGLEXTSwapControlTear, extGLXEXTSwapControlTear bool
-	exit, rebuild                                      chan struct{}
+	exit, rebuild, waitNextFrame                       chan struct{}
 
 	// The below variables are read-write after initialization of this struct,
 	// and as such must only be modified under the RWMutex.
@@ -68,7 +68,7 @@ type glfwWindow struct {
 	monitor                  *glfw.Monitor
 	beforeFullscreen         [2]int // Window size before fullscreen.
 	lastCursorX, lastCursorY float64
-	closed                   bool
+	closed, runInvoked       bool
 }
 
 // Props implements the Window interface.
@@ -345,6 +345,22 @@ func (w *glfwWindow) initCallbacks() {
 	// Damaged event.
 	w.window.SetRefreshCallback(func(gw *glfw.Window) {
 		w.sendEvent(Damaged{T: time.Now()}, DamagedEvents)
+
+		// If the window is being refreshed (e.g. resized) we must perform
+		// synchronization with the device for rendering the next frame before
+		// returning (and letting the window-resize operation go through) if we want
+		// to have smooth resizing without damaged framebuffer appearances.
+		w.RLock()
+		runInvoked := w.runInvoked
+		resizeRenderSync := w.props.ResizeRenderSync()
+		w.RUnlock()
+		if runInvoked && resizeRenderSync {
+			// TODO(slimsag): there is probably a way to record frame start too, so we
+			// do not need to wait for a secondary frame if the previous one was not
+			// started before the rezise event began.
+			w.waitNextFrame <- struct{}{}
+			w.waitNextFrame <- struct{}{}
+		}
 	})
 
 	// Minimized and Restored events.
@@ -545,6 +561,10 @@ func (w *glfwWindow) initCallbacks() {
 
 // run is the goroutine responsible for manging this window.
 func (w *glfwWindow) run() {
+	w.Lock()
+	w.runInvoked = true
+	w.Unlock()
+
 	// A ticker for updating the window title with the new FPS each second.
 	updateFPS := time.NewTicker(1 * time.Second)
 	exitFPS := make(chan struct{}, 1)
@@ -664,6 +684,12 @@ func (w *glfwWindow) run() {
 			if renderedFrame := fn(); renderedFrame {
 				// Swap OpenGL buffers.
 				w.window.SwapBuffers()
+
+				// If the refresh event is waiting for next frame, inform them of it.
+				select {
+				case <-w.waitNextFrame:
+				default:
+				}
 			}
 		}
 	}
@@ -772,13 +798,14 @@ func doNew(p *Props) (Window, gfx.Device, error) {
 
 	// Initialize window.
 	w := &glfwWindow{
-		notifier: &notifier{},
-		props:    p,
-		last:     NewProps(),
-		mouse:    mouse.NewWatcher(),
-		keyboard: keyboard.NewWatcher(),
-		exit:     make(chan struct{}, 1),
-		rebuild:  make(chan struct{}),
+		notifier:      &notifier{},
+		props:         p,
+		last:          NewProps(),
+		mouse:         mouse.NewWatcher(),
+		keyboard:      keyboard.NewWatcher(),
+		exit:          make(chan struct{}, 1),
+		rebuild:       make(chan struct{}),
+		waitNextFrame: make(chan struct{}),
 	}
 
 	// Build the actual GLFW window.

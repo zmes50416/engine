@@ -20,7 +20,7 @@ type Props struct {
 	cursorX, cursorY                                  float64
 	fullscreen, shouldClose, visible, decorated       bool
 	minimized, focused, vsync, resizable, alwaysOnTop bool
-	cursorGrabbed                                     bool
+	cursorGrabbed, resizeRenderSync                   bool
 	precision                                         gfx.Precision
 }
 
@@ -306,6 +306,26 @@ func (p *Props) CursorGrabbed() bool {
 	return grabbed
 }
 
+// SetResizeRenderSync sets whether or not window resize operations should be
+// synchronized with rendering. In general, this controls whether or not
+// resizing the window will be appear "fluid" by halting the user from resizing
+// the window until the next frame has been drawn. If rendering on-demand, i.e.
+// not at a fast rate, you should disable this option.
+func (p *Props) SetResizeRenderSync(sync bool) {
+	p.l.Lock()
+	p.resizeRenderSync = sync
+	p.l.Unlock()
+}
+
+// ResizeRenderSync returns whether or not resizing is sycnrhonized with
+// rendering.
+func (p *Props) ResizeRenderSync() bool {
+	p.l.RLock()
+	sync := p.resizeRenderSync
+	p.l.RUnlock()
+	return sync
+}
+
 // SetPrecision sets the framebuffer precision to be requested when the window
 // is created.
 //
@@ -360,6 +380,7 @@ func (p *Props) Precision() gfx.Precision {
 //  Decorated: true
 //  AlwaysOnTop: false
 //  CursorGrabbed: false
+//  ResizeRenderSync: true
 //  FramebufferSize: 1x1 (set via window owner)
 //  Precision: gfx.Precision{
 //      RedBits: 8, GreenBits: 8, BlueBits: 8, AlphaBits: 0,
@@ -370,25 +391,26 @@ func (p *Props) Precision() gfx.Precision {
 //
 func NewProps() *Props {
 	return &Props{
-		title:         "Azul3D - {FPS}",
-		width:         800,
-		height:        450,
-		fbWidth:       1,
-		fbHeight:      1,
-		x:             -1,
-		y:             -1,
-		cursorX:       -1.0,
-		cursorY:       -1.0,
-		shouldClose:   true,
-		visible:       true,
-		minimized:     false,
-		fullscreen:    false,
-		focused:       true,
-		vsync:         true,
-		resizable:     true,
-		decorated:     true,
-		alwaysOnTop:   false,
-		cursorGrabbed: false,
+		title:            "Azul3D - {FPS}",
+		width:            800,
+		height:           450,
+		fbWidth:          1,
+		fbHeight:         1,
+		x:                -1,
+		y:                -1,
+		cursorX:          -1.0,
+		cursorY:          -1.0,
+		shouldClose:      true,
+		visible:          true,
+		minimized:        false,
+		fullscreen:       false,
+		focused:          true,
+		vsync:            true,
+		resizable:        true,
+		decorated:        true,
+		alwaysOnTop:      false,
+		cursorGrabbed:    false,
+		resizeRenderSync: true,
 		precision: gfx.Precision{
 			RedBits: 8, GreenBits: 8, BlueBits: 8, AlphaBits: 0,
 			DepthBits: 24,
