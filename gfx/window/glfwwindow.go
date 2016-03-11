@@ -547,7 +547,11 @@ func (w *glfwWindow) initCallbacks() {
 func (w *glfwWindow) run() {
 	// A ticker for updating the window title with the new FPS each second.
 	updateFPS := time.NewTicker(1 * time.Second)
-	defer updateFPS.Stop()
+	exitFPS := make(chan struct{}, 1)
+	defer func() {
+		updateFPS.Stop()
+		exitFPS <- struct{}{}
+	}()
 
 	exec := w.device.Exec()
 
@@ -569,6 +573,27 @@ func (w *glfwWindow) run() {
 			w.window.Destroy()
 		}
 	}
+
+	// FPS in title must be updated in a separate goroutine. This is because a
+	// submission to the main loop is performed, and would block the device
+	// execution channel during window resize (because glfwPollEvents blocks on
+	// window resize on OS X).
+	go func() {
+		for {
+			select {
+			case <-updateFPS.C:
+				// Update title with FPS.
+				MainLoopChan <- func() {
+					w.Lock()
+					w.updateTitle()
+					w.Unlock()
+				}
+
+			case <-exitFPS:
+				return
+			}
+		}
+	}()
 
 	for {
 		select {
@@ -632,14 +657,6 @@ func (w *glfwWindow) run() {
 					w.swapper.Swap <- w.device
 					break sr
 				}
-			}
-
-		case <-updateFPS.C:
-			// Update title with FPS.
-			MainLoopChan <- func() {
-				w.Lock()
-				w.updateTitle()
-				w.Unlock()
 			}
 
 		case fn := <-exec:
