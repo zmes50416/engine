@@ -69,58 +69,41 @@ func PreDraw(dev gfx.Device, rect image.Rectangle, o *gfx.Object, c gfx.Camera) 
 	if len(o.Meshes) == 0 {
 		return false, ErrNoMeshes
 	}
-	meshesToLoad := 0
-	for _, m := range o.Meshes {
-		if m.Loaded && !m.HasChanged() {
-			continue
-		}
-		meshesToLoad++
-		if len(m.Vertices) == 0 {
-			return false, ErrNoVertices
-		}
-	}
-	texturesToLoad := 0
-	for _, t := range o.Textures {
-		if t.Loaded {
-			continue
-		}
-		texturesToLoad++
-		if t.Source == nil {
-			return false, ErrNilSource
-		}
-	}
 
-	// Begin loading of the object's resources now.
+	// Load all of the objects resources.
 	var (
-		shaderLoad  chan *gfx.Shader
 		meshLoad    chan *gfx.Mesh
 		textureLoad chan *gfx.Texture
 	)
 	if !o.Shader.Loaded {
-		shaderLoad = make(chan *gfx.Shader, 1)
+		shaderLoad := make(chan *gfx.Shader, 1)
 		dev.LoadShader(o.Shader, shaderLoad)
-	}
-	if meshesToLoad > 0 {
-		meshLoad = make(chan *gfx.Mesh, meshesToLoad)
-		for _, m := range o.Meshes {
-			dev.LoadMesh(m, meshLoad)
-		}
-	}
-	if texturesToLoad > 0 {
-		textureLoad = make(chan *gfx.Texture, texturesToLoad)
-		for _, t := range o.Textures {
-			dev.LoadTexture(t, textureLoad)
-		}
-	}
-
-	// Wait for loading of the object's resources to finish.
-	for i := 0; i < cap(shaderLoad); i++ {
 		<-shaderLoad
 	}
-	for i := 0; i < cap(meshLoad); i++ {
+	for _, m := range o.Meshes {
+		if m.Loaded && !m.HasChanged() {
+			continue
+		}
+		if len(m.Vertices) == 0 {
+			return false, ErrNoVertices
+		}
+		if meshLoad == nil {
+			meshLoad = make(chan *gfx.Mesh, 1)
+		}
+		dev.LoadMesh(m, meshLoad)
 		<-meshLoad
 	}
-	for i := 0; i < cap(textureLoad); i++ {
+	for _, t := range o.Textures {
+		if t.Loaded {
+			continue
+		}
+		if t.Source == nil {
+			return false, ErrNilSource
+		}
+		if textureLoad == nil {
+			textureLoad = make(chan *gfx.Texture, 1)
+		}
+		dev.LoadTexture(t, textureLoad)
 		<-textureLoad
 	}
 
