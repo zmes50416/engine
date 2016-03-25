@@ -32,7 +32,7 @@ func (a Quat) Equals(b Quat) bool {
 // Add performs a componentwise addition of the two quaternions, returning
 // a + b.
 func (a Quat) Add(b Quat) Quat {
-	return Quat{a.W + a.W, a.X + b.X, a.Y + b.Y, a.Z + b.Z}
+	return Quat{a.W + b.W, a.X + b.X, a.Y + b.Y, a.Z + b.Z}
 }
 
 // AddScalar performs a componentwise scalar addition of a + b.
