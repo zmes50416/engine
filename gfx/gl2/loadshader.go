@@ -213,8 +213,8 @@ func (r *device) LoadShader(s *gfx.Shader, done chan *gfx.Shader) {
 			runtime.SetFinalizer(native, finalizeShader)
 		}
 
-		// Flush OpenGL commands.
-		gl.Flush()
+		// Finish not Flush, see http://higherorderfun.com/blog/2011/05/26/multi-thread-opengl-texture-loading/
+		gl.Finish()
 
 		// Signal completion and return.
 		select {

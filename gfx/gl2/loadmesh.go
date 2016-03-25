@@ -404,9 +404,6 @@ func (r *device) LoadMesh(m *gfx.Mesh, done chan *gfx.Mesh) {
 		// Ensure no buffer is active when we leave (so that OpenGL state is untouched).
 		gl.BindBuffer(gl.ARRAY_BUFFER, 0)
 
-		// Flush OpenGL commands.
-		gl.Flush()
-
 		// If the mesh was not loaded, then we need to assign the native mesh
 		// and create a finalizer to free the native mesh later.
 		if !m.Loaded {
@@ -420,6 +417,9 @@ func (r *device) LoadMesh(m *gfx.Mesh, done chan *gfx.Mesh) {
 		// Mark the mesh as loaded, and clear data slices of needed.
 		m.Loaded = true
 		m.ClearData()
+
+		// Finish not Flush, see http://higherorderfun.com/blog/2011/05/26/multi-thread-opengl-texture-loading/
+		gl.Finish()
 
 		// Signal completion and return.
 		select {

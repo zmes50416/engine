@@ -330,9 +330,6 @@ func (r *device) LoadTexture(t *gfx.Texture, done chan *gfx.Texture) {
 		// Unbind texture to avoid carrying OpenGL state.
 		gl.BindTexture(gl.TEXTURE_2D, 0)
 
-		// Flush and Finish OpenGL commands.
-		gl.Flush()
-
 		// Mark the texture as loaded.
 		t.Loaded = true
 		t.NativeTexture = native
@@ -340,6 +337,9 @@ func (r *device) LoadTexture(t *gfx.Texture, done chan *gfx.Texture) {
 
 		// Attach a finalizer to the texture that will later free it.
 		runtime.SetFinalizer(native, finalizeTexture)
+
+		// Finish not Flush, see http://higherorderfun.com/blog/2011/05/26/multi-thread-opengl-texture-loading/
+		gl.Finish()
 
 		// Signal completion and return.
 		select {
