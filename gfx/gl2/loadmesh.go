@@ -293,13 +293,13 @@ func (r *device) LoadMesh(m *gfx.Mesh, done chan *gfx.Mesh) {
 		for k, s := range m.Attribs {
 			allAttribs[k] = s
 		}
-		if m.Colors != nil {
+		if len(m.Colors) != 0 {
 			allAttribs["Color"] = gfx.VertexAttrib{
 				Data:    m.Colors,
 				Changed: m.ColorsChanged,
 			}
 		}
-		if m.Bary != nil {
+		if len(m.Bary) != 0 {
 			allAttribs["Bary"] = gfx.VertexAttrib{
 				Data:    m.Bary,
 				Changed: m.BaryChanged,
