@@ -150,6 +150,6 @@
 // The examples repository contains several examples which utilize the gfx core
 // packages. Please see:
 //
-// https://azul3d.org/examples.v1
+// https://azul3d.org/examples
 //
 package gl2 // import "azul3d.org/engine/gfx/gl2"
