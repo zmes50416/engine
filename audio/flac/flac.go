@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package flac provides a FLAC audio decoder. It implements the audio.Decoder
-// interface of azul3d.org/audio.v1.
+// interface of azul3d.org/audio
 //
 // NOTE: This package is a work in progress. The implementation is incomplete
 // and subject to change. The documentation may be inaccurate.
