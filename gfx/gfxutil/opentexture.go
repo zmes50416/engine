@@ -20,7 +20,7 @@ import (
 // The returned texture will have a MinFilter == LinearMipmapLinear (trilinear
 // filtering) a MagFilter == Linear, and Format == DXT1.
 //
-// If a error is returned it is an IO or image decoding error and a nil shader
+// If a error is returned it is an IO or image decoding error and a nil texture
 // is returned.
 func OpenTexture(path string) (*gfx.Texture, error) {
 	// Open the image file and decode it.
