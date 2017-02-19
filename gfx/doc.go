@@ -12,7 +12,7 @@
 // coordinate system unless explicitly specified otherwise.
 //
 // Texture coordinates do not follow OpenGL convention but rather Go convention
-// where theorigin (0, 0) is the top-left corner of the texture.
+// where the origin (0, 0) is the top-left corner of the texture.
 //
 // Examples
 //
