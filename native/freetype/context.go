@@ -168,8 +168,8 @@ func (f *Font) SetSize(width, height, xResolution, yResolution int) error {
 		panic("SetSize(): width < 0 || height < 0")
 	}
 
-	if xResolution < 0 || xResolution < 0 {
-		panic("SetSize(): width < 0 || height < 0")
+	if xResolution < 0 || yResolution < 0 {
+		panic("SetSize(): xResolution < 0 || yResolution < 0")
 	}
 
 	err := C.FT_Set_Char_Size(
