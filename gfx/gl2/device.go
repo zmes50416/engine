@@ -375,8 +375,9 @@ func (r *device) queryYield() int {
 	r.pending.Lock()
 	var (
 		available, result int32
+		toRemove          []pendingQuery
 	)
-	for queryIndex, query := range r.pending.queries {
+	for _, query := range r.pending.queries {
 		gl.GetQueryObjectiv(query.id, gl.QUERY_RESULT_AVAILABLE, &available)
 		if available == gl.TRUE {
 			// Get the result then.
@@ -391,8 +392,20 @@ func (r *device) queryYield() int {
 			query.o.NativeObject = nativeObj
 
 			// Remove from pending slice.
-			r.pending.queries = append(r.pending.queries[:queryIndex], r.pending.queries[queryIndex+1:]...)
+			toRemove = append(toRemove, query)
 		}
+	}
+	for _, query := range toRemove {
+		// Find the index.
+		idx := 0
+		for i, q := range r.pending.queries {
+			if q == query {
+				idx = i
+			}
+		}
+
+		// Remove from the list.
+		r.pending.queries = append(r.pending.queries[:idx], r.pending.queries[idx+1:]...)
 	}
 	length := len(r.pending.queries)
 	r.pending.Unlock()
