@@ -8,7 +8,7 @@ package freetype
 #cgo windows,amd64 LDFLAGS: libfreetype_windows_amd64.a libpng_windows_amd64.a libz_windows_amd64.a libbz2_windows_amd64.a
 #cgo windows,amd64 CFLAGS: -I freetype-2.5.0.1/include/
 
-#cgo linux LDFLAGS: -l:libfreetype.a -l:libpng.a -l:libz.a -l:libbz2.a -l:libm.a
+#cgo linux LDFLAGS: -l:libfreetype.a -l:libpng.a -l:libz.a -l:libbz2.a -lm
 #cgo linux CFLAGS: -I/usr/include/freetype2
 
 // TODO(slimsag): add the other OS X freetype versions
