@@ -32,4 +32,3 @@
 // and it will be automatically placed there once again.
 //
 package al // import "azul3d.org/engine/native/al"
-
