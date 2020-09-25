@@ -348,9 +348,6 @@ func (d *decoder) readMuLaw(b audio.Slice) (read int, err error) {
 
 func (d *decoder) readALaw(b audio.Slice) (read int, err error) {
 	bb, bbOk := b.(audio.ALaw)
-	if !bbOk {
-		panic("oops")
-	}
 
 	var (
 		sample uint8
